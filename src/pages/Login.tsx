@@ -12,6 +12,7 @@ import { AppDispatch, RootState } from '../store/store';
 import useLocalStorage from '../hooks/useLocalStorage';
 import CustomCheckbox from '../components/UI/CustomCheckbox';
 import useMediaQuery from '../hooks/useMediaQuery';
+import LanguageDropdown from '../components/UI/LanguageDropdown';
 
 type FieldType = {
   email?: string;
@@ -100,6 +101,13 @@ const StyledFormOptions = styled.div`
   .ant-form-item{
   margin-bottom: 40px
   }
+`;
+
+const LanguageDropdownWrapper = styled.div`
+  position: absolute;
+  right: 24px;
+  top: 24px;
+  z-index: 999;
 `;
 const SignInFormContent: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>(); // Use the typed dispatch
@@ -210,6 +218,10 @@ const SignInForm: React.FC = () => {
 
   return (
     <Row gutter={[16, 16]}>
+      <LanguageDropdownWrapper>
+      <LanguageDropdown />
+      </LanguageDropdownWrapper>
+     
       {isDesktop && (
         <Col xs={24} lg={8}>
           <StyledBgWrapper>
