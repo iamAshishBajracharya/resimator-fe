@@ -71,6 +71,7 @@ const StyledTabsWrapper = styled.div`
   .ant-tabs-nav {
     border: 1px solid #f6f7f7;
     overflow: hidden; /* Prevent tabs from overflowing container */
+    margin-bottom: 48px;
   }
 
   .ant-tabs-nav-list {

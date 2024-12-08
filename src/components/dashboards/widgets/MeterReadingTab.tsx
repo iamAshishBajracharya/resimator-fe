@@ -5,12 +5,25 @@ import { useState } from "react";
 // import LanguageDropdown from "../LanguageDropdown";
 import WaterConsumptionCard from "./WaterConsumptionChart";
 import AddUserForm from "../../AddUserForm";
+import styled from "styled-components";
 // import SimpleChart from "../CustomChart/Index";
 const { Title, Text } = Typography;
+
+const StyledTitleWrapper = styled.div`
+margin-bottom: 16px;
+h3{
+   font-weight:500;
+    margin-bottom: 4px;
+}
+   
+`
 const  MeterReadingTab = () => {
     return ( <>
-        <Title level={2}>Consumption Overview</Title>
-        <Text>Showing energy consumptions</Text>
+      <StyledTitleWrapper>
+      <Title level={3}>Consumption Overview</Title>
+      <Text type="secondary">Showing energy consumptions</Text>
+      </StyledTitleWrapper>
+      
         {/* <SimpleChart /> */}
         <Row gutter={[16, 16]}>
             <Col xs={24} sm={12} md={8}>

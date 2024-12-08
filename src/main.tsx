@@ -49,6 +49,21 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
             "Tabs": {
               "inkBarColor": "rgb(68,129,214)",
               "itemSelectedColor": "rgb(0,171,241)"
+            },
+            "Typography": {
+              "fontSizeHeading1": 30,
+              "lineHeightHeading1": 1.26,
+              "fontSizeHeading2": 26,
+              "lineHeightHeading2": 1.5,
+              "fontSizeHeading3": 20,
+              "lineHeightHeading3": 1.2,
+              "fontSizeHeading4": 18,
+              "lineHeightHeading4": 1.2,
+              "lineHeightHeading5": 1.25,
+              "colorTextDescription": "rgb(71,84,103)"
+            },
+            "Card": {
+              "borderRadiusLG": 12
             }
           }
         }}
