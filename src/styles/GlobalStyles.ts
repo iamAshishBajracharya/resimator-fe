@@ -3,7 +3,7 @@ import { createGlobalStyle } from 'styled-components';
 const GlobalStyle = createGlobalStyle`
   /* Reset some basic elements */
   body, html, #root {
-    font-family: 'IBM Plex Sans', sans-serif; /* Use your preferred font */
+    // font-family: 'IBM Plex Sans', sans-serif; /* Use your preferred font */
     color: #272C36;
     font-size: 16px;
     font-weight: 400;
@@ -12,7 +12,8 @@ const GlobalStyle = createGlobalStyle`
  *, *::before, *::after {
     box-sizing: border-box;  
     margin: 0;
-    padding: 0;        
+    padding: 0;     
+ 
   }
  img{
     width: 100%;

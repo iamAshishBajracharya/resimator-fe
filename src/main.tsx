@@ -15,7 +15,8 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         "token": {
           "colorPrimary": "#1a5d89",
           "colorInfo": "#1a5d89",
-          "wireframe": false
+          "wireframe": false,
+          "fontFamily": "'IBM Plex Sans', sans-serif", // Add this token
         },
         "components": {
           "Form": {
