@@ -229,7 +229,7 @@ const App: React.FC = () => {
               items={[
                 {
                   key: "1",
-                  icon: <UserOutlined />,
+                  icon: <UserOutlined/>,
                   label: "Nav 1",
                 },
                 {
