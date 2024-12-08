@@ -3,6 +3,7 @@ import { FilterOutlined, DownloadOutlined } from "@ant-design/icons";
 import EnergyConsumptionChart from "./EnergyChart";
 import EditableTable from "./EditableTable";
 import styled from "styled-components";
+import filterIcon from '../../../assets/filter-icon.svg'
 const StyledEnergyConsumtionWidgetWrapper = styled.div`
 border: 1px solid #E3E4E4;
 border-radius: 8px;
