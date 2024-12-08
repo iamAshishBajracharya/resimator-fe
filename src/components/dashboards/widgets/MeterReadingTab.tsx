@@ -1,4 +1,4 @@
-import { Button, Col, Input, Row, Table, Typography } from "antd";
+import { Button, Col, Flex, Input, Row, Select, Table, Typography } from "antd";
 import { FilterOutlined, DownloadOutlined } from "@ant-design/icons";
 import EnergyConsumptionChart from "../widgets/EnergyChart";
 import { useState } from "react";
@@ -7,6 +7,7 @@ import WaterConsumptionCard from "./WaterConsumptionChart";
 import AddUserForm from "../../AddUserForm";
 import styled from "styled-components";
 import EnergyConsumptionWidget from "./EnergyConsumptionWidget";
+import YearDropdown from "../../UI/YearDropDown";
 // import SimpleChart from "../CustomChart/Index";
 const { Title, Text } = Typography;
 
@@ -24,10 +25,21 @@ span {
 `
 const  MeterReadingTab = () => {
     return ( <>
-      <StyledTitleWrapper>
-      <Title level={3}>Consumption Overview</Title>
-      <Text type="secondary">Showing energy consumptions</Text>
-      </StyledTitleWrapper>
+      <Row gutter = {[14, 14]}>
+        <Col xs = {12}>
+          <StyledTitleWrapper>
+            <Title level={3}>Consumption Overview</Title>
+            <Text type="secondary">Showing energy consumptions</Text>
+          </StyledTitleWrapper>
+        </Col>
+        <Col  xs = {12}>
+        <Flex justify="end">
+          <YearDropdown />
+        </Flex>
+         
+        </Col>
+      </Row>
+
       
         {/* <SimpleChart /> */}
         <Row gutter={[14, 14]}>
