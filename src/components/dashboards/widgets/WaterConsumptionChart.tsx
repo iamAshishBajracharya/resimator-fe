@@ -10,6 +10,7 @@ const StyledCardWrapper = styled.div`
   display:flex;
   justify-content:space-between;
   position:relative;
+  flex-wrap: wrap;
   .index-container{
   position: absolute;
   top: 0px;

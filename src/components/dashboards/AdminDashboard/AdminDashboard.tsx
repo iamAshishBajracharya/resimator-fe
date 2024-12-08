@@ -111,6 +111,9 @@ const StyledContentWrapper = styled.div`
   padding: 16px 48px;
   min-height: 100vh;
   background: white;
+  @media(max-width: 768px){
+  padding: 12px 
+  }
 `
 
 
