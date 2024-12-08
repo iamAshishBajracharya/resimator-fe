@@ -107,6 +107,12 @@ const StyledToggleIconContainer = styled.div`
   cursor: pointer;
 `
 
+const StyledContentWrapper = styled.div`
+  padding: 16px 48px;
+  min-height: 100vh;
+  background: white;
+`
+
 
 
 
@@ -229,7 +235,7 @@ const App: React.FC = () => {
               items={[
                 {
                   key: "1",
-                  icon: <UserOutlined/>,
+                  icon: <UserOutlined />,
                   label: "Nav 1",
                 },
                 {
@@ -294,17 +300,12 @@ const App: React.FC = () => {
 
           </Header>
         </StyledHeaderWrapper>
-        <Content
-          style={{
-            // margin: "24px 16px",
-            padding: 24,
-            minHeight: "100vh",
-            background: 'white',
-            borderRadius: borderRadiusLG,
-          }}
-        >
-          {renderContent()}
-        </Content>
+        <StyledContentWrapper>
+          <Content>
+            {renderContent()}
+          </Content>
+        </StyledContentWrapper>
+
       </Layout>
     </Layout>
   );
