@@ -6,8 +6,9 @@ import {
   UserOutlined,
   SearchOutlined,
   VideoCameraOutlined,
+  SettingOutlined,
 } from "@ant-design/icons";
-import { Button, Layout, Menu, theme, Input, Dropdown } from "antd";
+import { Button, Layout, Menu, theme, Input, Dropdown, Form, MenuProps } from "antd";
 import styled from 'styled-components';
 import Page1 from "./Page1";
 import Page2 from "./Page2";
@@ -18,6 +19,7 @@ import notificationIcon from '../../../assets/notification-on.svg'
 import { useDispatch } from "react-redux";
 import { logout } from "../../../features/auth/authSlice";
 import menuToggleIcon from '../.../../../../assets/toggle-menu.svg'
+import useMediaQuery from "../../../hooks/useMediaQuery";
 
 // import MeterReadingTab from "./MeterReadingTab/MeterReadingTab";
 // import Page1 from './Dashboard/Page1/Page1'
@@ -41,10 +43,13 @@ border-bottom: 1px solid #E3E4E4;
     }
     .right{
         display: flex;
-        gap: 16px;
+        gap: 27px;
         align-items:center;
         img{
         display: flex
+        }
+        @media (max-width: 768px){
+          gap: 8px;
         }
     }
     .search{
@@ -55,6 +60,14 @@ border-bottom: 1px solid #E3E4E4;
 `
 const StyledIconContainer = styled.div`
     width: 20px;
+`
+const StyledProfileIconContainer = styled.div`
+    width: 44px;
+    border-radius: 16px;
+    overflow:hidden;
+     @media (max-width: 768px){
+          width: 20px;
+        }
 `
 const StyledLogoContainer = styled.div`
     width: 45px;
@@ -95,10 +108,67 @@ const StyledToggleIconContainer = styled.div`
   cursor: pointer;
 `
 
+
+
+
+const RenderMobileSearch = () => {
+
+  const StyledSearchFormWrapper = styled.div`
+  form {
+  display:flex;
+  gap: 24px;
+  .ant-form-item{
+  width: 100%;}
+  }
+  `
+
+  const onSearchSubmit = (values: { search: string }) => {
+    // Handle the search logic here, e.g., making an API request
+    console.log('Search value:', values.search);
+  };
+  const items: MenuProps['items'] = [
+    {
+      key: '1',
+      label: (
+        <StyledSearchFormWrapper>
+          <Form onFinish={onSearchSubmit} layout="inline">
+            <Form.Item
+              name="search"
+              noStyle
+              rules={[{ required: true, message: 'Please enter a search term' }]}
+            >
+              <Input
+                className="search"
+                prefix={<SearchOutlined />}
+                style={{ height: '42px' }}
+                placeholder="Search"
+                onClick={e => e.stopPropagation()} // Prevent dropdown from closing
+              />
+            </Form.Item>
+
+            <Form.Item >
+              <Button type="primary" htmlType="submit" className="w-100">Search</Button>
+            </Form.Item>
+          </Form>
+        </StyledSearchFormWrapper>
+      ),
+    },
+  ];
+  return (
+    <Dropdown menu={{ items }} placement="topRight">
+      {/* <Button>topRight</Button> */}
+      <SearchOutlined style={{
+        fontSize: '18px'
+      }} />
+    </Dropdown>
+  )
+}
+
 const App: React.FC = () => {
   const dispatch = useDispatch()
   const [collapsed, setCollapsed] = useState(false);
   const [selectedKey, setSelectedKey] = useState("1");
+  const isMobile = useMediaQuery('(max-width: 991px)');
   const {
     token: { borderRadiusLG },
   } = theme.useToken();
@@ -187,26 +257,21 @@ const App: React.FC = () => {
             <div className="header-inner-container">
               <div className="left">
                 <StyledToggleIconContainer
-                 onClick={() => setCollapsed(!collapsed)}
-                >
-                <img src={menuToggleIcon} alt="" />
-                </StyledToggleIconContainer>
-             
-                {/* <Button
-                  type="text"
-                  icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
                   onClick={() => setCollapsed(!collapsed)}
-                  style={{
-                    fontSize: '16px',
-                    width: 64,
-                    height: 64,
-                  }}
-                /> */}
+                >
+                  <img src={menuToggleIcon} alt="" />
+                </StyledToggleIconContainer>
               </div>
+
               <div className="right">
-                <div>
-                  <Input className='search' prefix={<SearchOutlined />} style={{ height: '42px' }} />
-                </div>
+                {!isMobile ? (
+                  <div>
+                    <Input className='search' prefix={<SearchOutlined />} style={{ height: '42px' }} placeholder="Search" />
+                  </div>
+
+                ) : (
+                  RenderMobileSearch()
+                )}
                 <StyledIconContainer>
                   <img src={notificationIcon} alt="" />
                 </StyledIconContainer>
@@ -214,12 +279,17 @@ const App: React.FC = () => {
                   <img src={iconGB} alt="" />
                 </StyledIconContainer>
                 <Dropdown overlay={menu} trigger={['click']}>
-                  <StyledIconContainer>
+                  <StyledProfileIconContainer>
                     <img src={userIcon} alt="User" />
-                  </StyledIconContainer>
+                  </StyledProfileIconContainer>
                 </Dropdown>
               </div>
-              {/* <Input size='small' className='search' prefix={<SearchOutlined />} /> */}
+
+              {/* {isMobile ? (
+                RenderMobileCta()
+              ) : (
+               
+              )} */}
 
             </div>
 
