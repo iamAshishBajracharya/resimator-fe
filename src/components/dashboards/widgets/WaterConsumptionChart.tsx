@@ -2,7 +2,8 @@ import { Card, Typography } from "antd";
 import { Line } from "react-chartjs-2";
 import { ArrowDownOutlined } from "@ant-design/icons";
 import styled from "styled-components";
-
+import { useRef } from "react";
+import downIcon from '../../../assets/down-arrow.svg'
 const { Title, Text } = Typography;
 
 const StyledCardWrapper = styled.div`
@@ -15,12 +16,26 @@ const StyledCardWrapper = styled.div`
   position: absolute;
   top: 0px;
   right: 0px;
+  span{
+  display:flex;
+  gap: 4px;
+  color: #D92D20;
+    .icon-container{
+      width: 16px;
+    }
+  }
   }
 }
   .text-container{
     .title{
     margin: 0;
     font-size: 46px;
+    color:#101828;
+    font-weight: 600;
+    }
+    .title-secondary {
+    font-weight: 500;
+    color:rgba(71, 84, 103, 1);
     }
   }
   .canvas-container{
@@ -28,9 +43,13 @@ const StyledCardWrapper = styled.div`
     height: 56px;
     align-self: end;
   }
+  .ant-card {
+    border: 1px solid #E4E7EC;
+  }
 `
 
 const WaterConsumptionCard = () => {
+  const chartRef = useRef<HTMLCanvasElement | null>(null);
   // Chart.js Data
   const chartData = {
     labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
@@ -71,29 +90,28 @@ const WaterConsumptionCard = () => {
 
   return (
     <StyledCardWrapper>
-      <Card
-        style={{
-          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-        }}
-      >
+      <Card>
         <div className="inner-container">
           <div className="text-container">
           <div>
-            <Text style={{ color: "#5A5A5A" }}>Water consumption</Text>
+            <Text className="title-secondary">Water consumption</Text>
             <Title level={1} className="title">
               120 000L
             </Title>
           </div>
           <div className="index-container">
             <Text
-              style={{
-                color: "red",
-                fontWeight: "bold",
-                display: "flex",
-                alignItems: "center",
-              }}
+              // style={{
+              //   color: "red",
+              //   fontWeight: "bold",
+              //   display: "flex",
+              //   alignItems: "center",
+              // }}
             >
-              <ArrowDownOutlined style={{ marginRight: "4px" }} />
+              <div className="icon-container">
+                <img src={downIcon} alt="" />
+              </div>
+              {/* <ArrowDownOutlined style={{ marginRight: "4px" }} /> */}
               10%
             </Text>
           </div>

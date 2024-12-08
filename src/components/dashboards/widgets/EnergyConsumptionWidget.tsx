@@ -18,6 +18,7 @@ const StyledChartWrapper = styled.div`
     border: 1px solid #E3E4E4;
     height: 100%;
     padding: 24px;
+    border-radius:12px;
 `
 
 const StyledBodyWrapper = styled.div`
@@ -29,6 +30,7 @@ const StyledTableWrapper = styled.div`
    width: 100%;
    overflow: auto;
      border: 1px solid #E3E4E4;
+     border-radius: 12px;
 `
 const EnergyConsumptionWidget = () => {
     return (

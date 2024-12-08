@@ -15,8 +15,12 @@ margin-bottom: 16px;
 h3{
    font-weight:500;
     margin-bottom: 4px;
+    color: #191A1A;
 }
-   
+span {
+  color: #414444;
+  font-weight: 400px; 
+}  
 `
 const  MeterReadingTab = () => {
     return ( <>
@@ -26,7 +30,7 @@ const  MeterReadingTab = () => {
       </StyledTitleWrapper>
       
         {/* <SimpleChart /> */}
-        <Row gutter={[16, 16]}>
+        <Row gutter={[14, 14]}>
             <Col xs={24} sm={12} md={8}>
              <WaterConsumptionCard />
             </Col>
