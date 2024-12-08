@@ -1,24 +1,214 @@
-import { useDispatch } from "react-redux";
-import { login } from "../features/auth/authSlice";
+import React, { useEffect } from 'react';
+import type { FormProps } from 'antd';
+import { Button, Checkbox, Col, Form, Input, Row } from 'antd';
+import { Link, useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 
-const Login = () => {
-  const dispatch = useDispatch();
+import logo from '../assets/resimator-logo.png';
+import bgImg from '../assets/building 1.png';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginAsync, setAuthToken } from '../features/auth/authSlice';
+import { AppDispatch, RootState } from '../store/store';
+import useLocalStorage from '../hooks/useLocalStorage';
 
-  const handleLogin = () => {
-    dispatch(
-      login({
-        token: "example-token",
-        user: { id: 1, name: "John Doe", role: "admin" },
-      })
-    );
+type FieldType = {
+  email?: string;
+  password?: string;
+  remember?: boolean;
+};
+
+const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
+  console.log('Failed:', errorInfo);
+};
+
+const StyledFormOptions = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const StyledBgWrapper = styled.div`
+  background-image: url(${bgImg});
+  width: 100%;
+  height: 100vh;
+  background-size: cover;
+  position: relative;
+`;
+
+const StyledLogoContentWrapper = styled.div`
+  position: absolute;
+  top: 136px;
+  left: 71px;
+  width: 400px;
+  color: #fff;
+`;
+
+const StyledLogoWrapper = styled.div`
+  width: 226px;
+  margin-bottom: 63px;
+`;
+
+const StyledContentWrapper = styled.div`
+  p {
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+`;
+
+const StyledCopyrightTextContainer = styled.div`
+  position: absolute;
+  bottom: 42px;
+  left: 64px;
+  color: white;
+  font-size: 13px;
+  line-height: 1.1;
+`;
+
+const StyledSignInFormWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  .sign-in-wrapper-inner {
+    width: 390px;
+  }
+`;
+
+const SignupFormHeaderWrapper = styled.div`
+  text-align: center;
+  margin-bottom: 48px;
+  h2 {
+    font-weight: 500;
+    margin-bottom: 15px;
+  }
+`;
+
+const SignInFormContent: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>(); // Use the typed dispatch
+  const navigate = useNavigate();
+  const { status, error, token, user } = useSelector((state: RootState) => state.auth);
+
+  useEffect(() => {
+    console.log('status', status, error)
+    console.log('error', error)
+  }, [status, error])
+
+  const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
+    dispatch(loginAsync(values as any)); // Dispatch the thunk with correct typing
   };
 
+    // Use localStorage hook
+    const [, setJwtToken] = useLocalStorage<string>('jwtToken', '');
+    const [, setUserDetails] = useLocalStorage<object>('user', {});
+
+    useEffect(() => {
+      console.log(token, user)
+      if (token && user) {
+        // Store JWT token and user details in localStorage when available
+        setJwtToken(token);
+        setUserDetails(user);
+        
+        // Dispatch setAuthToken to update Redux stsore
+        dispatch(setAuthToken(token));
+        
+        // Redirect to dashboard or home page
+        navigate('/dashboard');
+      }
+    }, [token, user, setJwtToken, setUserDetails, dispatch, navigate]);
+  
   return (
-    <div>
-      <h1>Login</h1>
-      <button onClick={handleLogin}>Login</button>
+    <div className="sign-in-wrapper-inner">
+      <SignupFormHeaderWrapper>
+        <h2>
+          Sign in to <strong>Resimator</strong>
+        </h2>
+        <p className="link-text-small">
+          Please sign in to Resimator using email & password received in your email.
+        </p>
+      </SignupFormHeaderWrapper>
+
+      <Form
+        name="basic"
+        initialValues={{ remember: true }}
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
+        autoComplete="off"
+      >
+        <Form.Item
+          name="email"
+          rules={[{ required: true, message: 'Please input your email!' }]}
+        >
+          <Input placeholder="Email" />
+        </Form.Item>
+
+        <Form.Item
+          name="password"
+          rules={[{ required: true, message: 'Please input your password!' }]}
+        >
+          <Input.Password placeholder="Password" />
+        </Form.Item>
+
+        <StyledFormOptions>
+          <Form.Item name="remember" valuePropName="checked">
+            <Checkbox>Remember me</Checkbox>
+          </Form.Item>
+          <Link to="/forgot-password">Forgot password?</Link>
+        </StyledFormOptions>
+        {/* Display error message here */}
+        {error && (
+          <Form.Item>
+            <div style={{ color: 'red', textAlign: 'center' }}>
+              {/* {error as any} */}
+              Username or password is incorrect.
+            </div>
+          </Form.Item>
+        )}
+        <Form.Item>
+          <Button type="primary" htmlType="submit" block>
+            Sign In
+          </Button>
+        </Form.Item>
+      </Form>
     </div>
   );
 };
 
-export default Login;
+const SignInForm: React.FC = () => {
+  const navigate = useNavigate();
+  const { token } = useSelector((state: RootState) => state.auth); // Get token from Redux state
+
+  useEffect(() => {
+    if (token) {
+      // If the user is already logged in, navigate to the dashboard
+      navigate('/dashboard');
+    }
+  }, [token, navigate]); // Only re-run if token changes
+
+  return (
+    <Row gutter={[16, 16]}>
+      <Col xs={24} md={8}>
+        <StyledBgWrapper>
+          <StyledLogoContentWrapper>
+            <StyledLogoWrapper>
+              <img src={logo} alt="logo" />
+            </StyledLogoWrapper>
+            <StyledContentWrapper>
+              <p>Effortlessly Manage Your Property</p>
+              <h1>Add, Buy, or Rent with Ease!</h1>
+            </StyledContentWrapper>
+          </StyledLogoContentWrapper>
+        </StyledBgWrapper>
+        <StyledCopyrightTextContainer>
+          <p>2024 Resimator. All rights reserved.</p>
+        </StyledCopyrightTextContainer>
+      </Col>
+      <Col xs={24} md={16}>
+        <StyledSignInFormWrapper>
+          <SignInFormContent />
+        </StyledSignInFormWrapper>
+      </Col>
+    </Row>
+  );
+};
+
+export default SignInForm;
