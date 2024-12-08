@@ -8,3 +8,7 @@
 4. run "npm install"
 
 5. run "npm run dev"
+
+6. ADMIN CREDENTIALS 
+    email: admin@example.com
+    password: adminPass123
