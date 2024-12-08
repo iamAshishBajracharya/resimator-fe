@@ -10,6 +10,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loginAsync, setAuthToken } from '../features/auth/authSlice';
 import { AppDispatch, RootState } from '../store/store';
 import useLocalStorage from '../hooks/useLocalStorage';
+import CustomCheckbox from '../components/UI/CustomCheckbox';
+import useMediaQuery from '../hooks/useMediaQuery';
 
 type FieldType = {
   email?: string;
@@ -21,11 +23,7 @@ const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
   console.log('Failed:', errorInfo);
 };
 
-const StyledFormOptions = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
+
 
 const StyledBgWrapper = styled.div`
   background-image: url(${bgImg});
@@ -40,11 +38,13 @@ const StyledLogoContentWrapper = styled.div`
   top: 136px;
   left: 71px;
   width: 400px;
+  max-width: calc(100% - 71px);
   color: #fff;
 `;
 
 const StyledLogoWrapper = styled.div`
   width: 226px;
+  max-width: 100%;
   margin-bottom: 63px;
 `;
 
@@ -68,7 +68,8 @@ const StyledSignInFormWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
+  height: 100vh;
+  padding: 16px;
   .sign-in-wrapper-inner {
     width: 390px;
   }
@@ -83,6 +84,23 @@ const SignupFormHeaderWrapper = styled.div`
   }
 `;
 
+const StyledForm = styled(Form)`
+  .email {
+    margin-bottom: 32px;
+  }
+  .password {
+  margin-bottom: 16px;
+  }
+`;
+
+const StyledFormOptions = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  .ant-form-item{
+  margin-bottom: 40px
+  }
+`;
 const SignInFormContent: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>(); // Use the typed dispatch
   const navigate = useNavigate();
@@ -97,25 +115,25 @@ const SignInFormContent: React.FC = () => {
     dispatch(loginAsync(values as any)); // Dispatch the thunk with correct typing
   };
 
-    // Use localStorage hook
-    const [, setJwtToken] = useLocalStorage<string>('jwtToken', '');
-    const [, setUserDetails] = useLocalStorage<object>('user', {});
+  // Use localStorage hook
+  const [, setJwtToken] = useLocalStorage<string>('jwtToken', '');
+  const [, setUserDetails] = useLocalStorage<object>('user', {});
 
-    useEffect(() => {
-      console.log(token, user)
-      if (token && user) {
-        // Store JWT token and user details in localStorage when available
-        setJwtToken(token);
-        setUserDetails(user);
-        
-        // Dispatch setAuthToken to update Redux stsore
-        dispatch(setAuthToken(token));
-        
-        // Redirect to dashboard or home page
-        navigate('/dashboard');
-      }
-    }, [token, user, setJwtToken, setUserDetails, dispatch, navigate]);
-  
+  useEffect(() => {
+    console.log(token, user)
+    if (token && user) {
+      // Store JWT token and user details in localStorage when available
+      setJwtToken(token);
+      setUserDetails(user);
+
+      // Dispatch setAuthToken to update Redux stsore
+      dispatch(setAuthToken(token));
+
+      // Redirect to dashboard or home page
+      navigate('/dashboard');
+    }
+  }, [token, user, setJwtToken, setUserDetails, dispatch, navigate]);
+
   return (
     <div className="sign-in-wrapper-inner">
       <SignupFormHeaderWrapper>
@@ -127,16 +145,20 @@ const SignInFormContent: React.FC = () => {
         </p>
       </SignupFormHeaderWrapper>
 
-      <Form
+      <StyledForm
         name="basic"
         initialValues={{ remember: true }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
+        layout='vertical'
       >
         <Form.Item
           name="email"
           rules={[{ required: true, message: 'Please input your email!' }]}
+          label="Email"
+          className='email'
+        // style={{ marginBottom: '32px' }}
         >
           <Input placeholder="Email" />
         </Form.Item>
@@ -144,13 +166,15 @@ const SignInFormContent: React.FC = () => {
         <Form.Item
           name="password"
           rules={[{ required: true, message: 'Please input your password!' }]}
+          label="Password"
+          className='password'
         >
           <Input.Password placeholder="Password" />
         </Form.Item>
 
         <StyledFormOptions>
           <Form.Item name="remember" valuePropName="checked">
-            <Checkbox>Remember me</Checkbox>
+            <CustomCheckbox>Remember me</CustomCheckbox>
           </Form.Item>
           <Link to="/forgot-password">Forgot password?</Link>
         </StyledFormOptions>
@@ -164,11 +188,11 @@ const SignInFormContent: React.FC = () => {
           </Form.Item>
         )}
         <Form.Item>
-          <Button type="primary" htmlType="submit" block>
+          <Button type="primary" htmlType="submit" block className='submit-button'>
             Sign In
           </Button>
         </Form.Item>
-      </Form>
+      </StyledForm>
     </div>
   );
 };
@@ -176,7 +200,7 @@ const SignInFormContent: React.FC = () => {
 const SignInForm: React.FC = () => {
   const navigate = useNavigate();
   const { token } = useSelector((state: RootState) => state.auth); // Get token from Redux state
-
+  const isDesktop = useMediaQuery('(min-width: 991px)');
   useEffect(() => {
     if (token) {
       // If the user is already logged in, navigate to the dashboard
@@ -186,23 +210,26 @@ const SignInForm: React.FC = () => {
 
   return (
     <Row gutter={[16, 16]}>
-      <Col xs={24} md={8}>
-        <StyledBgWrapper>
-          <StyledLogoContentWrapper>
-            <StyledLogoWrapper>
-              <img src={logo} alt="logo" />
-            </StyledLogoWrapper>
-            <StyledContentWrapper>
-              <p>Effortlessly Manage Your Property</p>
-              <h1>Add, Buy, or Rent with Ease!</h1>
-            </StyledContentWrapper>
-          </StyledLogoContentWrapper>
-        </StyledBgWrapper>
-        <StyledCopyrightTextContainer>
-          <p>2024 Resimator. All rights reserved.</p>
-        </StyledCopyrightTextContainer>
-      </Col>
-      <Col xs={24} md={16}>
+      {isDesktop && (
+        <Col xs={24} lg={8}>
+          <StyledBgWrapper>
+            <StyledLogoContentWrapper>
+              <StyledLogoWrapper>
+                <img src={logo} alt="logo" />
+              </StyledLogoWrapper>
+              <StyledContentWrapper>
+                <p>Effortlessly Manage Your Property</p>
+                <h1>Add, Buy, or Rent with Ease!</h1>
+              </StyledContentWrapper>
+            </StyledLogoContentWrapper>
+          </StyledBgWrapper>
+          <StyledCopyrightTextContainer>
+            <p>2024 Resimator. All rights reserved.</p>
+          </StyledCopyrightTextContainer>
+        </Col>
+      )}
+
+      <Col xs={24} lg={16}>
         <StyledSignInFormWrapper>
           <SignInFormContent />
         </StyledSignInFormWrapper>
