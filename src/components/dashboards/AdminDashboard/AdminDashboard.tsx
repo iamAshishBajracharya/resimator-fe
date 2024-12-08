@@ -17,7 +17,7 @@ import userIcon from '../../../assets/300-3 6.jpg'
 import notificationIcon from '../../../assets/notification-on.svg'
 import { useDispatch } from "react-redux";
 import { logout } from "../../../features/auth/authSlice";
-
+import menuToggleIcon from '../.../../../../assets/toggle-menu.svg'
 
 // import MeterReadingTab from "./MeterReadingTab/MeterReadingTab";
 // import Page1 from './Dashboard/Page1/Page1'
@@ -28,9 +28,16 @@ const { Header, Sider, Content } = Layout;
 const StyledHeaderWrapper = styled.div`
 header{
 background: white;
+padding: 14px 47px;
+height: auto;
+border-bottom: 1px solid #E3E4E4;
     .header-inner-container{
     display:flex;
     justify-content: space-between;
+    }
+    .left{
+      display:flex;
+      align-items:center;
     }
     .right{
         display: flex;
@@ -80,6 +87,12 @@ height: 100vh;
             }
         }
     }
+`
+
+const StyledToggleIconContainer = styled.div`
+  width: 44px;
+  height: 39px;
+  cursor: pointer;
 `
 
 const App: React.FC = () => {
@@ -173,7 +186,13 @@ const App: React.FC = () => {
           <Header >
             <div className="header-inner-container">
               <div className="left">
-                <Button
+                <StyledToggleIconContainer
+                 onClick={() => setCollapsed(!collapsed)}
+                >
+                <img src={menuToggleIcon} alt="" />
+                </StyledToggleIconContainer>
+             
+                {/* <Button
                   type="text"
                   icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
                   onClick={() => setCollapsed(!collapsed)}
@@ -182,7 +201,7 @@ const App: React.FC = () => {
                     width: 64,
                     height: 64,
                   }}
-                />
+                /> */}
               </div>
               <div className="right">
                 <div>
