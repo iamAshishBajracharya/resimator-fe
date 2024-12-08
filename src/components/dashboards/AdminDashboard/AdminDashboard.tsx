@@ -78,18 +78,17 @@ const StyledSiderContainer = styled.div`
       background: white;
       height: 100%;
       padding: 32px 17px;
+      border: 1px solid #E3E4E4;
     }
   
 `
 const StyledMenuContainer = styled.div`
 ul{
+border:none !important;
 height: 100vh;
 }
     .ant-menu-item.ant-menu-item-selected{
-        background-color: ${(props) => {
-    console.log('props', props)
-    return props.theme?.base?.color?.active
-  }};
+        background-color: #00ABF1;
         color: white;
         .anticon{
             svg{
@@ -166,7 +165,7 @@ const RenderMobileSearch = () => {
 
 const App: React.FC = () => {
   const dispatch = useDispatch()
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
   const [selectedKey, setSelectedKey] = useState("1");
   const isMobile = useMediaQuery('(max-width: 991px)');
   const {
