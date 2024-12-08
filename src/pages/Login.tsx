@@ -114,21 +114,11 @@ const SignInFormContent: React.FC = () => {
   const navigate = useNavigate();
   const { status, error, token, user } = useSelector((state: RootState) => state.auth);
 
-  useEffect(() => {
-    console.log('status', status, error)
-    console.log('error', error)
-  }, [status, error])
-
-  const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
-    dispatch(loginAsync(values as any)); // Dispatch the thunk with correct typing
-  };
-
   // Use localStorage hook
   const [, setJwtToken] = useLocalStorage<string>('jwtToken', '');
   const [, setUserDetails] = useLocalStorage<object>('user', {});
 
   useEffect(() => {
-    console.log(token, user)
     if (token && user) {
       // Store JWT token and user details in localStorage when available
       setJwtToken(token);
@@ -141,6 +131,25 @@ const SignInFormContent: React.FC = () => {
       navigate('/dashboard');
     }
   }, [token, user, setJwtToken, setUserDetails, dispatch, navigate]);
+
+    // Load saved credentials from localStorage
+    const savedEmail = localStorage.getItem('email') || '';
+    const savedPassword = localStorage.getItem('password') || '';
+
+    const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
+      dispatch(loginAsync(values as any)); // Dispatch the thunk with correct typing
+      
+      if (values.remember) {
+        // Store email and password in localStorage if remember me is checked
+        localStorage.setItem('email', values.email || '');
+        localStorage.setItem('password', values.password || '');
+      } else {
+        // Clear stored credentials if remember me is unchecked
+        localStorage.removeItem('email');
+        localStorage.removeItem('password');
+      }
+    };
+  
 
   return (
     <div className="sign-in-wrapper-inner">
@@ -155,11 +164,16 @@ const SignInFormContent: React.FC = () => {
 
       <StyledForm
         name="basic"
-        initialValues={{ remember: true }}
+        initialValues={{
+          email: savedEmail, // Set saved email
+          password: savedPassword, // Set saved password
+          remember: savedEmail ? true : false, // If email exists, check remember me
+        }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
         layout='vertical'
+
       >
         <Form.Item
           name="email"
