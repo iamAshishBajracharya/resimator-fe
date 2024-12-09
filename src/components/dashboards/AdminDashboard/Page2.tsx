@@ -5,6 +5,10 @@ import styled from "styled-components";
 import { RightOutlined } from '@ant-design/icons'
 import { Link } from "react-router-dom";
 import AddUserForm from "../../AddUserForm";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUsers } from "../../../features/user/userSlice";
+import { useEffect } from "react";
+import { AppDispatch, RootState } from "../../../store/store";
 const StyledIconContainer = styled.div`
 width: 14px;
 `
@@ -25,6 +29,12 @@ margin-bottom: 16px;
 
 const { Title } = Typography
 const Page2 = () => {
+    const dispatch = useDispatch<AppDispatch>()
+    const { users, loading, error } = useSelector((state: RootState) => state.user);
+    useEffect(() =>{
+        dispatch(fetchUsers())
+    },[])
+   
     return (
         <>
             <StyledTitleWrapper>
@@ -63,7 +73,7 @@ const Page2 = () => {
                 />
             </StyledBreadCrumbsWrapper>
 
-            <UserTable />
+            <UserTable data = {users || []} loading = {loading} error = {error} />
             <AddUserForm />
         </>
 

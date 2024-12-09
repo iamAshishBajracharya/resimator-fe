@@ -38,9 +38,15 @@ interface UserData {
   publishedOn: string;
 }
 
+interface UserTableProps {
+  data: any[]; // Array of users
+  loading: boolean;     // Loading state
+  error: string | null; // Error state
+}
 
 const {Title, Text}  = Typography
-const UserTable: React.FC = () => {
+const UserTable: React.FC<UserTableProps> = ({ data:userData, loading, error }) => {
+  console.log('props.data', userData, loading, error)
   const [data,] = useState<UserData[]>([
     {
       key: "1",
@@ -145,8 +151,8 @@ const UserTable: React.FC = () => {
           overlay={
             <Menu
               items={[
-                { key: "1", label: "Edit" },
-                { key: "2", label: "Delete" },
+                { key: "1", label: "Deactivate" },
+                // { key: "2", label: "Delete" },
               ]}
             />
           }
@@ -156,7 +162,11 @@ const UserTable: React.FC = () => {
       ),
     },
   ];
-
+if (error) {
+  return (
+    <Title level={3}>Something went wrong</Title>
+  )
+}
   return (
     <StyledTableContainer>
       <div className="table-header">
@@ -178,7 +188,7 @@ const UserTable: React.FC = () => {
         </Space>
       </div>
       <Table
-        dataSource={data}
+        dataSource={userData}
         columns={columns}
         rowClassName={(_, index) => (index % 2 === 0 ? "odd-row" : "")}
         pagination={{
@@ -186,6 +196,7 @@ const UserTable: React.FC = () => {
           showSizeChanger: true,
           pageSizeOptions: ["5", "10", "20"],
         }}
+        loading= {loading}
         footer={() => (
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <Select defaultValue={5} style={{ width: 120 }}>

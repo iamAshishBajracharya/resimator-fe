@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axiosInstance from "../../utils/axiosInstance";
 
+// Define the shape of the data
 interface UserProfile {
   id: number;
   name: string;
@@ -9,12 +10,14 @@ interface UserProfile {
 
 interface UserState {
   profile: UserProfile | null;
+  users: UserProfile[]; // Store the list of users
   loading: boolean;
   error: string | null;
 }
 
 const initialState: UserState = {
   profile: null,
+  users: [],
   loading: false,
   error: null,
 };
@@ -95,6 +98,18 @@ export const signupAsync = createAsyncThunk(
   }
 );
 
+export const fetchUsersAsync = createAsyncThunk(
+  "user/fetchUsers",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get("/users"); // Fetch users from API
+      return response.data.users; // Assuming the API returns an object with a `users` array
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data || "Failed to fetch users");
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -125,9 +140,23 @@ const userSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string; // Handle signup failure
       });
+    builder
+      .addCase(fetchUsersAsync.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchUsersAsync.fulfilled, (state, action: PayloadAction<UserProfile[]>) => {
+        state.loading = false;
+        state.users = action.payload; // Store the list of users
+      })
+      .addCase(fetchUsersAsync.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string; // Handle fetch failure
+      });
   },
 });
 
 export const { fetchUserStart, fetchUserSuccess, fetchUserFailure } = userSlice.actions;
 export { signupAsync as signup };
+export { fetchUsersAsync as fetchUsers };
 export default userSlice.reducer;
