@@ -4,6 +4,7 @@ import homeIcon from '../../../assets/icon-home.svg'
 import styled from "styled-components";
 import { RightOutlined } from '@ant-design/icons'
 import { Link } from "react-router-dom";
+import AddUserForm from "../../AddUserForm";
 const StyledIconContainer = styled.div`
 width: 14px;
 `
@@ -63,6 +64,7 @@ const Page2 = () => {
             </StyledBreadCrumbsWrapper>
 
             <UserTable />
+            <AddUserForm />
         </>
 
     );

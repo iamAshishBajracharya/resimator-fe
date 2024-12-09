@@ -1,12 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { Form, Input, Button, Select, DatePicker, Switch, Upload, Row, Col, Card } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
+import { useDispatch } from "react-redux";
+import { signup } from "../features/user/userSlice";
+import { SignupPayload } from "../types/GlobalTypes";
 
 const { Option } = Select;
 
 const AddUserForm: React.FC = () => {
+  const dispatch = useDispatch()
+  const [isFNTChecked, setIsFNTChecked] = useState(true)
+  const [isSendEmailChecked, setIsSendEmailChecked] = useState(true)
+  const [isInvodeAddressChecked, setIsInvodeAddressChecked] = useState(true)
   const handleFinish = (values: any) => {
     console.log("Form values:", values);
+    dispatch(signup(values as SignupPayload))
   };
 
   return (
@@ -15,7 +23,7 @@ const AddUserForm: React.FC = () => {
         {/* General Info Section */}
         <h3>General Info</h3>
         <Row gutter={16}>
-          <Col span={12}>
+          <Col xs = {24} sm = {12} md={8}>
             <Form.Item
               label="Full Name"
               name="fullName"
@@ -24,7 +32,7 @@ const AddUserForm: React.FC = () => {
               <Input placeholder="Enter full name" />
             </Form.Item>
           </Col>
-          <Col span={12}>
+          <Col xs = {24} sm = {12} md={8}>
             <Form.Item
               label="Username"
               name="username"
@@ -33,7 +41,7 @@ const AddUserForm: React.FC = () => {
               <Input placeholder="Enter username" />
             </Form.Item>
           </Col>
-          <Col span={12}>
+          <Col xs = {24} sm = {12} md={8}>
             <Form.Item
               label="Email"
               name="email"
@@ -42,17 +50,17 @@ const AddUserForm: React.FC = () => {
               <Input placeholder="Enter email address" />
             </Form.Item>
           </Col>
-          <Col span={12}>
+          <Col xs = {24} sm = {12} md={8}>
             <Form.Item label="Phone Number" name="phoneNumber">
               <Input placeholder="+358 00-000-0000" />
             </Form.Item>
           </Col>
-          <Col span={12}>
-            <Form.Item label="Social Security No (optional)" name="ssn">
+          <Col xs = {24} sm = {12} md={8}>
+            <Form.Item label="Social Security No (optional)" name="socialSecurityNo">
               <Input placeholder="Enter social security no" />
             </Form.Item>
           </Col>
-          <Col span={12}>
+          <Col xs = {24} sm = {12} md={8}>
             <Form.Item label="Gender" name="gender">
               <Select placeholder="Select gender">
                 <Option value="male">Male</Option>
@@ -61,7 +69,7 @@ const AddUserForm: React.FC = () => {
               </Select>
             </Form.Item>
           </Col>
-          <Col span={12}>
+          <Col xs = {24} sm = {12} md={8}>
             <Form.Item label="Status" name="status">
               <Select placeholder="Select status">
                 <Option value="active">Active</Option>
@@ -69,12 +77,12 @@ const AddUserForm: React.FC = () => {
               </Select>
             </Form.Item>
           </Col>
-          <Col span={12}>
+          <Col xs = {24} sm = {12} md={8}>
             <Form.Item label="Date of Birth" name="dob">
               <DatePicker style={{ width: "100%" }} />
             </Form.Item>
           </Col>
-          <Col span={12}>
+          <Col xs = {24} sm = {12} md={8}>
             <Form.Item label="Role" name="role">
               <Select placeholder="Select role">
                 <Option value="owner">Owner</Option>
@@ -83,18 +91,28 @@ const AddUserForm: React.FC = () => {
               </Select>
             </Form.Item>
           </Col>
-          <Col span={12}>
+          <Col xs = {24} sm = {12} md={8}>
             <Form.Item name="ftnVerification" valuePropName="checked">
-              <Switch checkedChildren="Can Skip FTN Verification" unCheckedChildren="Cannot Skip FTN Verification" />
+              {/* <Switch checkedChildren="Can Skip FTN Verification" unCheckedChildren="Cannot Skip FTN Verification" /> */}
+              <Switch 
+                checked={isFNTChecked}
+                onChange={(() => setIsFNTChecked(!isFNTChecked))}
+              />
+              {isFNTChecked ? "Can Skip FTN Verification" : "Cannot Skip FTN Verification"}
             </Form.Item>
           </Col>
-          <Col span={12}>
-            <Form.Item name="emailNotification" valuePropName="checked">
-              <Switch checkedChildren="Send Welcome Email" unCheckedChildren="Do Not Send Email" />
+          <Col xs = {24} sm = {12} md={8}>
+            <Form.Item name="sendWelcomeEmail" valuePropName="checked">
+              {/* <Switch checkedChildren="Send Welcome Email" unCheckedChildren="Do Not Send Email" /> */}
+              <Switch 
+              checked={isSendEmailChecked}
+              onChange={(() => setIsSendEmailChecked(!isSendEmailChecked))}
+              />
+              {isSendEmailChecked ? "Send Welcome Email" : "Do Not Send Email"}
             </Form.Item>
           </Col>
           <Col span={24}>
-            <Form.Item label="Profile Picture" name="upload">
+            <Form.Item label="Profile Picture" name="profileImage">
               <Upload beforeUpload={() => false} maxCount={1}>
                 <Button icon={<UploadOutlined />}>Click to Upload</Button>
               </Upload>
@@ -129,12 +147,12 @@ const AddUserForm: React.FC = () => {
               </Select>
             </Form.Item>
           </Col>
-          <Col span={12}>
+          <Col xs = {24} sm = {12} md={8}>
             <Form.Item label="Postal Code" name="postalCode">
               <Input placeholder="Enter postal code" />
             </Form.Item>
           </Col>
-          <Col span={12}>
+          <Col xs = {24} sm = {12} md={8}>
             <Form.Item label="Street Address" name="streetAddress">
               <Input placeholder="Enter street address" />
             </Form.Item>
@@ -150,7 +168,12 @@ const AddUserForm: React.FC = () => {
         <Row gutter={16}>
           <Col span={24}>
             <Form.Item name="invoicingAddress" valuePropName="checked">
-              <Switch checkedChildren="Invoicing Address Enabled" unCheckedChildren="Invoicing Address Disabled" />
+              {/* <Switch checkedChildren="Invoicing Address Enabled" unCheckedChildren="Invoicing Address Disabled" /> */}
+              <Switch 
+              checked={isInvodeAddressChecked}
+              onChange={(() => setIsInvodeAddressChecked(!isInvodeAddressChecked))}
+              />
+              {isInvodeAddressChecked ? "Invoicing Address Enabled" : "Invoicing Address Disabled"}
             </Form.Item>
           </Col>
         </Row>
