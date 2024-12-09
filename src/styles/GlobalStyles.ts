@@ -34,6 +34,19 @@ const GlobalStyle = createGlobalStyle`
   .w-100{
   width: 100%
   }
+  .odd-row {
+  background-color: #F9FAFB; /* Light gray background for odd rows */
+}
+  .ant-table-thead{
+    tr{
+    th{
+      background: white !important;
+    }
+    }
+  }
+  .ant-table-footer{
+  background: white !important;
+  }
 `
 
 export default GlobalStyle

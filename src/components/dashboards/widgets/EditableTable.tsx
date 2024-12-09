@@ -6,7 +6,6 @@ import useMediaQuery from "../../../hooks/useMediaQuery";
 
 const StyledTableWrapper = styled.div`
 .ant-table-thead{
-border: 5px solid green;
 tr{
         th{
 background: white;
@@ -65,6 +64,7 @@ const ReadOnlyTable: React.FC = () => {
             dataIndex: "year",
             key: "year",
             fixed: isMobile ? "left" : false,
+            width: 100,
         },
         {
             title: (

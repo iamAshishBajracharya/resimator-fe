@@ -1,6 +1,32 @@
 import React, { useState } from "react";
-import { Table, Tag, Input, Button, Dropdown, Menu, Select, Space } from "antd";
+import { Table, Tag, Input, Button, Dropdown, Menu, Select, Space, Typography } from "antd";
 import { SearchOutlined, FilterOutlined, DownloadOutlined, PlusOutlined } from "@ant-design/icons";
+import styled from "styled-components";
+
+
+
+const StyledTableContainer = styled.div`
+  border: 1px solid #E3E4E4;
+  // padding: 16px 24px;
+  border-radius: 12px;
+  table{
+  .ant-table-cell{
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+
+  }
+  }
+  .table-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+      padding: 16px 24px;
+  }
+`
+
+const StyledTitleContainer = styled.div`
+
+`
 
 interface UserData {
   key: string;
@@ -12,6 +38,8 @@ interface UserData {
   publishedOn: string;
 }
 
+
+const {Title, Text}  = Typography
 const UserTable: React.FC = () => {
   const [data,] = useState<UserData[]>([
     {
@@ -130,18 +158,21 @@ const UserTable: React.FC = () => {
   ];
 
   return (
-    <div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-        <h2>User overview</h2>
+    <StyledTableContainer>
+      <div className="table-header">
+        <StyledTitleContainer>
+          <Title level={3}>User List</Title>
+          <Text>Manage your team members and their account permissions here.</Text>
+        </StyledTitleContainer>
         <Space>
           <Input
             placeholder="Search"
             prefix={<SearchOutlined />}
             style={{ width: 200 }}
           />
-          <Button icon={<FilterOutlined />}>More filters</Button>
-          <Button icon={<DownloadOutlined />}>Export</Button>
-          <Button type="primary" icon={<PlusOutlined />}>
+          <Button size="large" icon={<FilterOutlined />}>More filters</Button>
+          <Button size="large" icon={<DownloadOutlined />}></Button>
+          <Button size="large" type="primary">
             Add
           </Button>
         </Space>
@@ -149,6 +180,7 @@ const UserTable: React.FC = () => {
       <Table
         dataSource={data}
         columns={columns}
+        rowClassName={(_, index) => (index % 2 === 0 ? "odd-row" : "")}
         pagination={{
           pageSize: 5,
           showSizeChanger: true,
@@ -166,7 +198,7 @@ const UserTable: React.FC = () => {
           </div>
         )}
       />
-    </div>
+    </StyledTableContainer>
   );
 };
 
